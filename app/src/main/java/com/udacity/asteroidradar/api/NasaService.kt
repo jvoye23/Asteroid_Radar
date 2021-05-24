@@ -4,6 +4,7 @@ import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterF
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.udacity.asteroidradar.PictureOfDay
+import kotlinx.coroutines.Deferred
 import okhttp3.OkHttpClient
 import org.json.JSONObject
 import retrofit2.Call
@@ -40,9 +41,9 @@ enum class NasaApiFilter (val value: String){
 interface NasaApiService {
     @GET("feed")
     suspend fun getAsteroids(
-       // @Query("start_date") start_date: String,
-        // @Query("end_date") end_date: String,
-        @Query("filter") type : String,
+        @Query("start_date") start_date: String,
+        @Query("end_date") end_date: String,
+        //@Query("filter") type : String,
         @Query("api_key") api_key: String
     ): String
 }

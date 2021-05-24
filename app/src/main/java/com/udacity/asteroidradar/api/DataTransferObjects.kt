@@ -1,8 +1,12 @@
 package com.udacity.asteroidradar.api
 
-import com.squareup.moshi.JsonClass
+import android.os.Parcelable
+import com.squareup.moshi.Json
 import com.udacity.asteroidradar.Asteroid
-import com.udacity.asteroidradar.database.DatabaseAsteroid
+import com.udacity.asteroidradar.PictureOfDay
+import com.udacity.asteroidradar.database.AsteroidEntity
+import com.udacity.asteroidradar.database.PictureEntity
+import kotlinx.android.parcel.Parcelize
 
 /**
  * DataTransferObjects go in this file. These are responsible for parsing responses from the server
@@ -10,10 +14,7 @@ import com.udacity.asteroidradar.database.DatabaseAsteroid
  * using them.
  */
 
-@JsonClass(generateAdapter = true)
-data class NetworkAsteroidContainer(val asteroids: List<NetworkAsteroid>)
-
-@JsonClass(generateAdapter = true)
+@Parcelize
 data class NetworkAsteroid(
     val id: Long,
     val codename: String,
@@ -22,14 +23,33 @@ data class NetworkAsteroid(
     val estimatedDiameter: Double,
     val relativeVelocity: Double,
     val distanceFromEarth: Double,
-    val isPotentiallyHazardous: Boolean)
+    val isPotentiallyHazardous: Boolean
+    ) : Parcelable
 
-/**
- * an extension function which converts from database objects to domain objects
- */
+data class NetworkPicture(
+    @Json(name = "media_type")
+    val mediaType: String,
+    val title: String,
+    val url: String
+    )
 
-fun NetworkAsteroidContainer.asDomainModel(): List<Asteroid>{
-    return asteroids.map {
+fun ArrayList<Asteroid>.asDatabaseModel(): Array<AsteroidEntity>{
+    return map {
+        AsteroidEntity(
+            id = it.id,
+            codename = it.codename,
+            closeApproachDate = it.closeApproachDate,
+            absoluteMagnitude = it.absoluteMagnitude,
+            estimatedDiameter = it.estimatedDiameter,
+            relativeVelocity = it.relativeVelocity,
+            distanceFromEarth = it.distanceFromEarth,
+            isPotentiallyHazardous = it.isPotentiallyHazardous
+        )
+    }.toTypedArray()
+}
+
+fun List<AsteroidEntity>.asDomainModel(): List<Asteroid>{
+    return map {
         Asteroid(
             id = it.id,
             codename = it.codename,
@@ -38,16 +58,14 @@ fun NetworkAsteroidContainer.asDomainModel(): List<Asteroid>{
             estimatedDiameter = it.estimatedDiameter,
             relativeVelocity = it.relativeVelocity,
             distanceFromEarth = it.distanceFromEarth,
-            isPotentiallyHazardous = it.isPotentiallyHazardous)
+            isPotentiallyHazardous = it.isPotentiallyHazardous
+        )
     }
 }
 
-/**
- * an extension function that converts from data transfer objects to database objects:
- */
-fun NetworkAsteroidContainer.asDatabaseModel(): Array<DatabaseAsteroid>{
-    return asteroids.map {
-        DatabaseAsteroid(
+fun List<Asteroid>.asNetworkModel(): List<NetworkAsteroid>{
+    return map {
+        NetworkAsteroid(
             id = it.id,
             codename = it.codename,
             closeApproachDate = it.closeApproachDate,
@@ -55,8 +73,61 @@ fun NetworkAsteroidContainer.asDatabaseModel(): Array<DatabaseAsteroid>{
             estimatedDiameter = it.estimatedDiameter,
             relativeVelocity = it.relativeVelocity,
             distanceFromEarth = it.distanceFromEarth,
-            isPotentiallyHazardous = it.isPotentiallyHazardous)
-    }.toTypedArray()
+            isPotentiallyHazardous = it.isPotentiallyHazardous
+        )
+    }
 }
+
+fun List<NetworkAsteroid>.toDomainModel(): List<Asteroid>{
+    return map {
+        Asteroid(
+            id = it.id,
+            codename = it.codename,
+            closeApproachDate = it.closeApproachDate,
+            absoluteMagnitude = it.absoluteMagnitude,
+            estimatedDiameter = it.estimatedDiameter,
+            relativeVelocity = it.relativeVelocity,
+            distanceFromEarth = it.distanceFromEarth,
+            isPotentiallyHazardous = it.isPotentiallyHazardous
+        )
+    }
+}
+
+fun NetworkPicture.toDomainModel(): PictureOfDay {
+    return PictureOfDay(
+        mediaType = this.mediaType,
+        title = this.title,
+        url = this.url
+    )
+}
+
+fun PictureOfDay.toDomainModel(): NetworkPicture {
+    return NetworkPicture(
+        mediaType = this.mediaType,
+        title = this.title,
+        url = this.url
+    )
+}
+
+fun PictureOfDay.asDatabaseModel(): PictureEntity{
+    return PictureEntity(
+        mediaType = this.mediaType,
+        title = this.title,
+        url = this.url
+    )
+}
+
+fun PictureEntity.asDomainModel():PictureOfDay{
+    return PictureOfDay(
+        mediaType = this.mediaType,
+        title = this.title,
+        url = this.url
+    )
+}
+
+
+
+
+
 
 

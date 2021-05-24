@@ -10,11 +10,14 @@ import androidx.navigation.fragment.findNavController
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.api.NasaApiFilter
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
+import com.udacity.asteroidradar.repository.AsteroidsRepository
 
 class MainFragment : Fragment() {
 
     private val viewModel: MainViewModel by lazy {
-        ViewModelProvider(this).get(MainViewModel::class.java)
+        val activity = requireNotNull(this.activity)
+
+        ViewModelProvider(this, MainViewModel.Factory(activity.application)).get(MainViewModel::class.java)
     }
 
     /**
@@ -48,8 +51,15 @@ class MainFragment : Fragment() {
         })
 
 
-        viewModel.asteroidJsonResponse.observe(viewLifecycleOwner, Observer {
+        //solution without repository and database
+        /*viewModel.asteroidJsonResponse.observe(viewLifecycleOwner, Observer {
             it?.let {
+                adapter.submitList(it)
+            }
+        })*/
+
+        viewModel.asteroids.observe(viewLifecycleOwner, Observer {
+            it.let {
                 adapter.submitList(it)
             }
         })
@@ -65,14 +75,11 @@ class MainFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        viewModel.updateFilter(
-            when (item.itemId){
-                //TO-DO
-                R.id.show_week_menu -> NasaApiFilter.END_DATE
-                R.id.show_today_menu -> NasaApiFilter.START_DATE
-                else -> NasaApiFilter.END_DATE
-            }
-        )
+        when(item.itemId){
+            R.id.show_saved_menu -> viewModel.updateFilter(AsteroidsRepository.AsteroidsFilter.SAVED)
+            R.id.show_today_menu -> viewModel.updateFilter(AsteroidsRepository.AsteroidsFilter.TODAY)
+            R.id.show_week_menu -> viewModel.updateFilter(AsteroidsRepository.AsteroidsFilter.WEEKLY)
+        }
         return true
     }
 }
