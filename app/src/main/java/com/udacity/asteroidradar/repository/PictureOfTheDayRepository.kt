@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 
-private const val API_KEY = "7O8wgkuigf85v7bm5VRnlmTHbMBTRgG7XlhA2nFt"
+private const val API_KEY = ""
 
 class PictureOfTheDayRepository(private val database: AsteroidsDatabase) {
 
