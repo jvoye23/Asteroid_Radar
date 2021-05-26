@@ -11,11 +11,10 @@ import com.udacity.asteroidradar.database.AsteroidsDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
-import java.lang.IllegalArgumentException
 import java.time.LocalDate
 
 
-private const val API_KEY = "7O8wgkuigf85v7bm5VRnlmTHbMBTRgG7XlhA2nFt"
+private const val API_KEY = ""
 
 class AsteroidsRepository(private val database: AsteroidsDatabase){
 
