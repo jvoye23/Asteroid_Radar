@@ -14,7 +14,7 @@ import org.json.JSONObject
 import java.time.LocalDate
 
 
-private const val API_KEY = ""
+private const val API_KEY = "INSERT YOUR API_KEY HERE"
 
 class AsteroidsRepository(private val database: AsteroidsDatabase){
 
