@@ -10,8 +10,8 @@ import kotlinx.android.parcel.Parcelize
 
 /**
  * DataTransferObjects go in this file. These are responsible for parsing responses from the server
- * or formatting objects to send to the server. You should convert these to domain objects before
- * using them.
+ * or formatting objects to send to the server. These objects should be converted to domain objects
+ * before using them.
  */
 
 @Parcelize

@@ -14,8 +14,6 @@ class AsteroidRadarApplication: Application() {
 
     private val applicationScope = CoroutineScope(Dispatchers.Default)
 
-
-
     /**
      * onCreate is called before the first screen is shown to the user.
      *

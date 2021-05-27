@@ -13,7 +13,6 @@ import retrofit2.HttpException
 class RefreshAsteroidsWorker(appContext: Context, params: WorkerParameters):
         CoroutineWorker(appContext, params){
 
-
     companion object{
         const val WORK_NAME = "RefreshAsteroidsWorker"
     }
@@ -27,9 +26,7 @@ class RefreshAsteroidsWorker(appContext: Context, params: WorkerParameters):
         return try {
             asteroidsRepository.refreshAsteroids()
             pictureOfTheDayRepository.refreshPictureOfTheDay()
-
             asteroidsRepository.removeOldAsteroids()
-
             Result.success()
         }catch (exception: HttpException){
             Result.retry()

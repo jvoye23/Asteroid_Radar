@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.udacity.asteroidradar.Asteroid
+import com.udacity.asteroidradar.Constants
 import com.udacity.asteroidradar.api.*
 import com.udacity.asteroidradar.database.AsteroidsDatabase
 import kotlinx.coroutines.Dispatchers
@@ -13,15 +14,12 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.time.LocalDate
 
-
-private const val API_KEY = "INSERT YOUR API_KEY HERE"
-
 class AsteroidsRepository(private val database: AsteroidsDatabase){
 
     /**
      * Repository responsible to fetch asteroids from the network and store it
      * in the database
-      */
+     */
 
     enum class AsteroidsFilter {WEEKLY, TODAY, SAVED}
 
@@ -64,15 +62,13 @@ class AsteroidsRepository(private val database: AsteroidsDatabase){
     suspend fun refreshAsteroids() {
         withContext(Dispatchers.IO) {
             try {
-
-                //val startDate = getTodayDateFormatted()
                 val startDate = getTodayDateFormatted()
                 val endDate = getOneWeekAheadDateFormatted()
 
                 val networkAsteroidsResponse = NasaApi.retrofitService.getAsteroids(
                     start_date = startDate,
                     end_date = endDate,
-                    api_key = API_KEY
+                    api_key = Constants.API_KEY
                 )
 
                 val asteroidList = parseAsteroidsJsonResult(JSONObject(networkAsteroidsResponse))
